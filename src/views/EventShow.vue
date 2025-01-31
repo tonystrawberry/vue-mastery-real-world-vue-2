@@ -36,7 +36,7 @@ export default {
   props: {
     event: {
       type: Object,
-      required: false,
+      required: true,
     },
   },
 };

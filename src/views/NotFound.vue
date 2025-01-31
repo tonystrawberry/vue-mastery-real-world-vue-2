@@ -1,24 +1,19 @@
 <template>
   <div>
-    <h1>404 - Not Found</h1>
-    <p>
-      The {{ resource || 'resource' }} you are looking for does not exist. It
-      may have been removed, had its name changed, or is temporarily
-      unavailable.
-      <router-link to="/">Go Home</router-link>
-    </p>
+    <h1>Oops!</h1>
+    <h3>The {{ resource }} you're looking for is not here.</h3>
+    <router-link :to="{ name: 'event-list' }"
+      >Back to the home page</router-link
+    >
   </div>
 </template>
-
 <script>
 export default {
   props: {
     resource: {
       type: String,
-      required: false,
+      required: true,
     },
   },
 };
 </script>
-
-<style></style>

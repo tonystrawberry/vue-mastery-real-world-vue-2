@@ -1,7 +1,7 @@
 <template>
   <div class="icon-wrapper">
     <svg class="icon" :width="width" :height="height">
-      <use v-bind="{ 'xlink:href': '/feather-sprite.svg#' + name }" />
+      <use v-bind="{ 'xlink:href': '/feather-sprite.svg#' + name }"></use>
     </svg>
     <slot></slot>
   </div>
@@ -9,8 +9,7 @@
 
 <script>
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Icon',
+  name: 'BaseIcon',
   props: {
     name: String,
     width: {

@@ -11,59 +11,57 @@
       />
       <template v-if="$v.event.category.$error">
         <p v-if="!$v.event.category.required" class="errorMessage">
-          Category is required
+          Category is required.
         </p>
       </template>
 
       <h3>Name & describe your event</h3>
-      <!-- 
-      v-model is syntactic sugar for 
-      :value="event.title" @input="event.title = $event.target.value"
-      -->
       <BaseInput
-        class="field"
         label="Title"
         v-model="event.title"
-        placeholder="Add a title"
+        type="text"
+        placeholder="Title"
+        class="field"
         :class="{ error: $v.event.title.$error }"
         @blur="$v.event.title.$touch()"
       />
 
       <template v-if="$v.event.title.$error">
         <p v-if="!$v.event.title.required" class="errorMessage">
-          Title is required
+          Title is required.
         </p>
       </template>
 
       <BaseInput
-        class="field"
         label="Description"
         v-model="event.description"
-        placeholder="Add a description"
+        type="text"
+        placeholder="Description"
+        class="field"
         :class="{ error: $v.event.description.$error }"
         @blur="$v.event.description.$touch()"
       />
 
       <template v-if="$v.event.description.$error">
         <p v-if="!$v.event.description.required" class="errorMessage">
-          Description is required
+          Description is required.
         </p>
       </template>
 
       <h3>Where is your event?</h3>
-
       <BaseInput
-        class="field"
         label="Location"
         v-model="event.location"
-        placeholder="Add a location"
+        type="text"
+        placeholder="Location"
+        class="field"
         :class="{ error: $v.event.location.$error }"
         @blur="$v.event.location.$touch()"
       />
 
       <template v-if="$v.event.location.$error">
         <p v-if="!$v.event.location.required" class="errorMessage">
-          Location is required
+          Location is required.
         </p>
       </template>
 
@@ -81,7 +79,7 @@
 
       <template v-if="$v.event.date.$error">
         <p v-if="!$v.event.date.required" class="errorMessage">
-          Date is required
+          Date is required.
         </p>
       </template>
 
@@ -96,7 +94,7 @@
 
       <template v-if="$v.event.time.$error">
         <p v-if="!$v.event.time.required" class="errorMessage">
-          Time is required
+          Time is required.
         </p>
       </template>
 
@@ -106,7 +104,6 @@
         :disabled="$v.$anyError"
         >Submit</BaseButton
       >
-
       <p v-if="$v.$anyError" class="errorMessage">
         Please fill out the required field(s).
       </p>
@@ -115,8 +112,8 @@
 </template>
 
 <script>
-import nprogress from 'nprogress';
 import Datepicker from 'vuejs-datepicker';
+import NProgress from 'nprogress';
 import { required } from 'vuelidate/lib/validators';
 
 export default {
@@ -147,23 +144,21 @@ export default {
   methods: {
     createEvent() {
       this.$v.$touch();
-      if (this.$v.$invalid) {
-        return;
-      }
-
-      nprogress.start();
-      this.$store
-        .dispatch('event/createEvent', this.event)
-        .then(() => {
-          this.$router.push({
-            name: 'event-show',
-            params: { id: this.event.id },
+      if (!this.$v.$invalid) {
+        NProgress.start();
+        this.$store
+          .dispatch('event/createEvent', this.event)
+          .then(() => {
+            this.$router.push({
+              name: 'event-show',
+              params: { id: this.event.id },
+            });
+            this.event = this.createFreshEventObject();
+          })
+          .catch(() => {
+            NProgress.done();
           });
-          this.event = this.createFreshEventObject();
-        })
-        .catch(() => {
-          nprogress.done();
-        });
+      }
     },
     createFreshEventObject() {
       const user = this.$store.state.user.user;
@@ -185,9 +180,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.field {
-  margin-bottom: 24px;
-}
-</style>

@@ -3,10 +3,10 @@ import Router from 'vue-router';
 import EventCreate from './views/EventCreate.vue';
 import EventList from './views/EventList.vue';
 import EventShow from './views/EventShow.vue';
-import nprogress from 'nprogress';
+import NProgress from 'nprogress';
 import store from '@/store/store';
-import NotFound from '@/views/NotFound.vue';
-import NetworkIssue from '@/views/NetworkIssue.vue';
+import NotFound from './views/NotFound.vue';
+import NetworkIssue from './views/NetworkIssue.vue';
 
 Vue.use(Router);
 
@@ -16,8 +16,8 @@ const router = new Router({
     {
       path: '/',
       name: 'event-list',
-      props: true,
       component: EventList,
+      props: true,
     },
     {
       path: '/event/create',
@@ -58,18 +58,18 @@ const router = new Router({
     },
     {
       path: '*',
-      redirect: { name: '404' },
+      redirect: { name: '404', params: { resource: 'page' } },
     },
   ],
 });
 
 router.beforeEach((routeTo, routeFrom, next) => {
-  nprogress.start();
+  NProgress.start();
   next();
 });
 
 router.afterEach(() => {
-  nprogress.done();
+  NProgress.done();
 });
 
 export default router;
