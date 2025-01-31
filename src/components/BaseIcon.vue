@@ -1,35 +1,25 @@
 <template>
   <div class="icon-wrapper">
-    <span v-html="svg"></span>
+    <svg class="icon" :width="width" :height="height">
+      <use v-bind="{ 'xlink:href': '/feather-sprite.svg#' + name }" />
+    </svg>
     <slot></slot>
   </div>
 </template>
 
 <script>
-import feather from 'feather-icons';
-
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
+  name: 'Icon',
   props: {
-    name: {
-      type: String,
-      required: true,
-    },
+    name: String,
     width: {
-      type: Number,
+      type: [Number, String],
       default: 24,
     },
     height: {
-      type: Number,
+      type: [Number, String],
       default: 24,
-    },
-  },
-  computed: {
-    svg() {
-      return feather.icons[this.name].toSvg({
-        class: 'icon',
-        width: this.width,
-        height: this.height,
-      });
     },
   },
 };
@@ -42,8 +32,6 @@ export default {
   color: rgba(0, 0, 0, 0.4);
   font-size: 1rem;
   font-weight: 600;
-  margin-right: 6px;
-  gap: 6px;
 }
 .icon {
   stroke: currentColor;
@@ -51,5 +39,6 @@ export default {
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
+  margin-right: 6px;
 }
 </style>

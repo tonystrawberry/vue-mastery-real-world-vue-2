@@ -1,15 +1,11 @@
 import EventService from '@/services/EventService.js';
+
 export const namespaced = true;
 
 export const state = {
   events: [],
+  eventsTotal: 0,
   event: {},
-};
-
-export const getters = {
-  getEventById: (state) => (id) => {
-    return state.events.find((event) => event.id === id);
-  },
 };
 
 export const mutations = {
@@ -19,6 +15,9 @@ export const mutations = {
   SET_EVENTS(state, events) {
     state.events = events;
   },
+  SET_EVENTS_TOTAL(state, eventsTotal) {
+    state.eventsTotal = eventsTotal;
+  },
   SET_EVENT(state, event) {
     state.event = event;
   },
@@ -26,15 +25,13 @@ export const mutations = {
 
 export const actions = {
   createEvent({ commit, dispatch }, event) {
-    EventService.postEvent(event)
+    return EventService.postEvent(event)
       .then(() => {
         commit('ADD_EVENT', event);
-
         const notification = {
           type: 'success',
           message: 'Your event has been created!',
         };
-
         dispatch('notification/add', notification, { root: true });
       })
       .catch((error) => {
@@ -42,7 +39,6 @@ export const actions = {
           type: 'error',
           message: 'There was a problem creating your event: ' + error.message,
         };
-
         dispatch('notification/add', notification, { root: true });
         throw error;
       });
@@ -50,30 +46,39 @@ export const actions = {
   fetchEvents({ commit, dispatch }, { perPage, page }) {
     EventService.getEvents(perPage, page)
       .then((response) => {
-        console.log('response.data', response.data);
-        commit('SET_EVENTS', response.data.data);
+        commit('SET_EVENTS_TOTAL', parseInt(response.headers['x-total-count']));
+        commit('SET_EVENTS', response.data);
       })
       .catch((error) => {
         const notification = {
           type: 'error',
           message: 'There was a problem fetching events: ' + error.message,
         };
-
         dispatch('notification/add', notification, { root: true });
       });
   },
-  fetchEvent({ commit, dispatch }, id) {
-    EventService.getEvent(id)
-      .then((response) => {
-        commit('SET_EVENT', response.data);
-      })
-      .catch((error) => {
-        const notification = {
-          type: 'error',
-          message: 'There was a problem fetching event: ' + error.message,
-        };
+  fetchEvent({ commit, getters, dispatch }, id) {
+    var event = getters.getEventById(id);
 
-        dispatch('notification/add', notification, { root: true });
-      });
+    if (event) {
+      commit('SET_EVENT', event);
+    } else {
+      EventService.getEvent(id)
+        .then((response) => {
+          commit('SET_EVENT', response.data);
+        })
+        .catch((error) => {
+          const notification = {
+            type: 'error',
+            message: 'There was a problem fetching event: ' + error.message,
+          };
+          dispatch('notification/add', notification, { root: true });
+        });
+    }
+  },
+};
+export const getters = {
+  getEventById: (state) => (id) => {
+    return state.events.find((event) => event.id === id);
   },
 };
