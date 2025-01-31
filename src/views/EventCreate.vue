@@ -2,10 +2,18 @@
   <div>
     <h1>Create an Event</h1>
     <form @submit.prevent="createEvent">
-      <label>Select a category</label>
-      <select v-model="event.category">
-        <option v-for="cat in categories" :key="cat">{{ cat }}</option>
-      </select>
+      <BaseSelect
+        label="Select a category"
+        :options="categories"
+        v-model="event.category"
+        :class="{ error: $v.event.category.$error }"
+        @blur="$v.event.category.$touch()"
+      />
+      <template v-if="$v.event.category.$error">
+        <p v-if="!$v.event.category.required" class="errorMessage">
+          Category is required
+        </p>
+      </template>
 
       <h3>Name & describe your event</h3>
       <!-- 
@@ -13,40 +21,95 @@
       :value="event.title" @input="event.title = $event.target.value"
       -->
       <BaseInput
+        class="field"
         label="Title"
         v-model="event.title"
         placeholder="Add a title"
+        :class="{ error: $v.event.title.$error }"
+        @blur="$v.event.title.$touch()"
       />
 
+      <template v-if="$v.event.title.$error">
+        <p v-if="!$v.event.title.required" class="errorMessage">
+          Title is required
+        </p>
+      </template>
+
       <BaseInput
+        class="field"
         label="Description"
         v-model="event.description"
         placeholder="Add a description"
+        :class="{ error: $v.event.description.$error }"
+        @blur="$v.event.description.$touch()"
       />
+
+      <template v-if="$v.event.description.$error">
+        <p v-if="!$v.event.description.required" class="errorMessage">
+          Description is required
+        </p>
+      </template>
 
       <h3>Where is your event?</h3>
 
       <BaseInput
+        class="field"
         label="Location"
-        v-model="event.description"
+        v-model="event.location"
         placeholder="Add a location"
+        :class="{ error: $v.event.location.$error }"
+        @blur="$v.event.location.$touch()"
       />
+
+      <template v-if="$v.event.location.$error">
+        <p v-if="!$v.event.location.required" class="errorMessage">
+          Location is required
+        </p>
+      </template>
 
       <h3>When is your event?</h3>
 
       <div class="field">
         <label>Date</label>
-        <datepicker v-model="event.date" placeholder="Select a date" />
+        <datepicker
+          v-model="event.date"
+          placeholder="Select a date"
+          :input-class="{ error: $v.event.date.$error }"
+          @opened="$v.event.date.$touch()"
+        />
       </div>
 
-      <div class="field">
-        <label>Select a time</label>
-        <select v-model="event.time">
-          <option v-for="time in times" :key="time">{{ time }}</option>
-        </select>
-      </div>
+      <template v-if="$v.event.date.$error">
+        <p v-if="!$v.event.date.required" class="errorMessage">
+          Date is required
+        </p>
+      </template>
 
-      <input type="submit" class="button -fill-gradient" value="Submit" />
+      <BaseSelect
+        label="Select a time"
+        :options="times"
+        v-model="event.time"
+        class="field"
+        :class="{ error: $v.event.time.$error }"
+        @blur="$v.event.time.$touch()"
+      />
+
+      <template v-if="$v.event.time.$error">
+        <p v-if="!$v.event.time.required" class="errorMessage">
+          Time is required
+        </p>
+      </template>
+
+      <BaseButton
+        type="submit"
+        buttonClass="-fill-gradient"
+        :disabled="$v.$anyError"
+        >Submit</BaseButton
+      >
+
+      <p v-if="$v.$anyError" class="errorMessage">
+        Please fill out the required field(s).
+      </p>
     </form>
   </div>
 </template>
@@ -54,6 +117,7 @@
 <script>
 import nprogress from 'nprogress';
 import Datepicker from 'vuejs-datepicker';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   components: {
@@ -70,8 +134,23 @@ export default {
       event: this.createFreshEventObject(),
     };
   },
+  validations: {
+    event: {
+      category: { required },
+      title: { required },
+      description: { required },
+      location: { required },
+      date: { required },
+      time: { required },
+    },
+  },
   methods: {
     createEvent() {
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+
       nprogress.start();
       this.$store
         .dispatch('event/createEvent', this.event)

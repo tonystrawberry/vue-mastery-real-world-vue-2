@@ -1,13 +1,21 @@
 <template>
   <div>
     <label v-if="label">{{ label }}</label>
-    <input
-      type="text"
-      @input="updateValue"
+    <select
       :value="value"
+      @change="updateValue"
       v-bind="$attrs"
-      v-on="listeners"
-    />
+      v-on="$listeners"
+    >
+      <option
+        v-for="option in options"
+        :value="option"
+        :key="option.id"
+        :selected="option === value"
+      >
+        {{ option }}
+      </option>
+    </select>
   </div>
 </template>
 
@@ -15,20 +23,12 @@
 export default {
   inheritAttrs: false,
   props: {
-    label: {
-      type: String,
-      default: '',
-      required: false,
+    options: {
+      type: Array,
+      required: true,
     },
     value: [String, Number],
-  },
-  computed: {
-    listeners() {
-      return {
-        ...this.$listeners,
-        input: this.updateValue,
-      };
-    },
+    label: String,
   },
   methods: {
     updateValue(event) {
@@ -37,5 +37,3 @@ export default {
   },
 };
 </script>
-
-<style></style>
