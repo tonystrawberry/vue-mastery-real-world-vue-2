@@ -1,7 +1,7 @@
 {
   "events": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Beach Cleanup",
       "date": "Aug 28 2018",
       "time": "10:00",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Park Cleanup",
       "date": "Nov 12 2018",
       "time": "12:00",
@@ -49,7 +49,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "Pet Adoption Day",
       "date": "Dec 2 2018",
       "time": "12:00",
@@ -71,6 +71,34 @@
           "name": "Mary Gordon"
         }
       ]
+    },
+    {
+      "id": 1698864,
+      "category": "nature",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahr"
+      },
+      "title": "1",
+      "description": "2",
+      "location": "3",
+      "date": "2025-01-01T11:49:00.000Z",
+      "time": "3:00",
+      "attendees": []
+    },
+    {
+      "id": 4777037,
+      "category": "housing",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahr"
+      },
+      "title": "cefer",
+      "description": "gre",
+      "location": "grege",
+      "date": "2025-01-01T12:40:00.000Z",
+      "time": "3:00",
+      "attendees": []
     }
   ]
 }
