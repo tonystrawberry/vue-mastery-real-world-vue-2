@@ -1,11 +1,15 @@
 <p align="center">
-  <a href="https://tonystrawberry.codes/">
+  <a href="https://quill-on-nuxtjs.vercel.app/editor">
     <img src="docs/logo.png" width="60" />
   </a>
 </p>
 <h1 align="center">
   Event App (Study Project)
 </h1>
+
+
+https://github.com/user-attachments/assets/9b1fd2cf-1af0-4f85-ad39-e50340a9f121
+
 
 ## 🖥 Context
 
