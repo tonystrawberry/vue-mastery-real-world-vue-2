@@ -7,10 +7,6 @@
   Event App (Study Project)
 </h1>
 
-
-https://github.com/user-attachments/assets/9b1fd2cf-1af0-4f85-ad39-e50340a9f121
-
-
 ## 🖥 Context
 
 Even though I used Vue 2 in a professional environment JS in the past (more than 2 years ago), I needed a crash course to get back on track for my next job requiring me to use Vue 2 and Vue 3 (a migration is planned).
